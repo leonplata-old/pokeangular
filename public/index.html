@@ -8,36 +8,63 @@
   <body ng-controller="PokemonStats">
     <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container-fluid">
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <div class="collapse navbar-collapse">
           <form class="navbar-form navbar-left" role="search">
+            <label>Pokemon No.</label>
             <div class="form-group">
-              <input type="number" class="form-control" placeholder="Search" ng-model="pokemonNumber">
+              <input type="number" class="form-control" placeholder="1-649" ng-model="pokemonNumber" min="1" max="649" required>
             </div>
-            <button type="submit" class="btn btn-default" ng-click="setPokemon(pokemonNumber)">Submit</button>
+            <button type="submit" class="btn btn-default" ng-click="findPokemon(pokemonNumber)">Submit</button>
           </form>
         </div>
       </div>
     </nav>
     <div class="container" style="margin-top: 50px;">
+      <div>
+
+      </div>
       <div class="row">
         <div class="col-md-12 text-center">
           <h1>{{ pokemon.name }}</h1>
         </div>
       </div>
-      <div class="text-center">
-        <img ng-src="http://img.pokemondb.net/artwork/{{pokemon.name | lowercase}}.jpg" />
+      <div class="panel panel-info"  ng-show="pokemon">
+        <div class="panel-heading">Appearance</div>
+        <div class="panel-body text-center">
+          <img ng-src="http://img.pokemondb.net/artwork/{{pokemon.name | lowercase}}.jpg" />
+        </div>
       </div>
       <div class="row">
         <div class="col-md-6">
-          <div class="list-group move-box">
-            <a href="#" class="list-group-item" ng-click="selectMove(move)"
-              ng-class="{'active': move == selected}"
+          <div class="list-group panel panel-info" ng-show="pokemon">
+            <div class="panel-heading">Moves</div>
+            <a href="" class="list-group-item" ng-click="selectMove(move)"
+              ng-class="{'active': move == selectedMoveInfo}"
               ng-repeat="move in pokemon.moves">
               {{move.name}}
             </a>
           </div>
+        </div>
+        <div class="col-md-6">
+          <ul class="list-group panel panel-info" ng-show="selectedMove">
+            <div class="panel-heading">Move Info: <strong>{{selectedMove.name}}</strong></div>
+            <li href="" class="list-group-item">
+              <label>description</label>
+              <div>{{selectedMove.description}}</div>
+            </li>
+            <li href="" class="list-group-item">
+              <label>category</label>
+              <div>{{selectedMove.category}}</div>
+            </li>
+            <li href="" class="list-group-item">
+              <label>power</label>
+              <div>{{selectedMove.power}}</div>
+            </li>
+            <li href="" class="list-group-item">
+              <label>accuracy</label>
+              <div>{{selectedMove.accuracy}}</div>
+            </li>
+          </ul>
         </div>
       </div>
     </div>

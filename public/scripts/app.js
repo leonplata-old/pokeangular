@@ -12,26 +12,27 @@ angular.module('pokeangular', [])
   .service('RestService', ['$http', function ($http) {
 
     function RestService(serviceUrl) {
-      this._serviceUrl = serviceUrl;
+      this.serviceUrl = serviceUrl;
     }
 
-    Object.defineProperties(RestService.prototype, {
-      serviceUrl: {
-        get: function () {
-          return this._serviceUrl;
-        }
-      }
-    });
+    function getDataOnly(obj) {
+      return obj.data;
+    }
 
     RestService.prototype.getById = function (id) {
       var url = this.serviceUrl + id.toString();
-      return $http.get(url)
-        .then(function (response) {
-          return response.data;
-        });
+      return $http.get(url).then(getDataOnly);
     };
 
     return RestService;
+  }])
+
+  .service('Api', ['pokeapi', 'RestService', function (pokeapi, RestService) {
+
+    var apiService = new RestService(pokeapi.url);
+
+    return apiService;
+
   }])
 
   .service('Pokemon', ['pokeapi', 'RestService', function (pokeapi, RestService) {
@@ -44,24 +45,61 @@ angular.module('pokeangular', [])
 
   }])
 
-  .controller('PokemonStats', ['$scope', 'Pokemon', function ($scope, Pokemon) {
+  .service('Move', ['pokeapi', 'RestService', function (pokeapi, RestService) {
 
-    $scope.selected = null;
+    var pokemonEndpoint = pokeapi.url + 'move/';
 
-    $scope.selectMove = function (move) {
-      $scope.selected = move;
-    };
+    var pokemonService = new RestService(pokemonEndpoint);
 
-    $scope.setPokemon = function (num) {
-      if (!(num <= num)) {
+    return pokemonService;
+
+  }])
+
+  .controller('PokemonStats', ['$scope', 'Pokemon', 'Move', function ($scope, Pokemon, Move) {
+
+    $scope.selectedMoveInfo = null;
+    $scope.selectedMove = null;
+
+    function notExist(value) {
+      return value === null || value === undefined;
+    }
+
+    function setPokemon(pokemon) {
+      $scope.pokemon = pokemon;
+    }
+
+    function extractMoveId(uri) {
+      var elements = uri.split('/');
+      var index = elements.length - 2;
+      return elements[index];
+    }
+
+    function setMove(move) {
+      $scope.selectedMove = move;
+    }
+
+    function findMove(id) {
+
+      if (notExist(id)) {
         return;
       }
-      Pokemon.getById(num)
-        .then(function (pokemon) {
-          $scope.pokemon = pokemon;
-        });
+
+      Move.getById(id).then(setMove);
+    }
+
+    $scope.selectMove = function (moveInfo) {
+      $scope.selectedMoveInfo = moveInfo;
+      var moveId = extractMoveId(moveInfo.resource_uri);
+      findMove(moveId);
     };
 
-    $scope.setPokemon();
+    $scope.findPokemon = function (pokemonId) {
+
+      if (notExist(pokemonId)) {
+        return;
+      }
+
+      Pokemon.getById(pokemonId).then(setPokemon);
+    };
 
   }]);
