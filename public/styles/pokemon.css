@@ -1,0 +1,12 @@
+.move-box {
+  height: 200px;
+  overflow: auto;
+}
+
+.move-item {
+  cursor: pointer;
+}
+
+.move-selected {
+  background-color: blue;
+}
