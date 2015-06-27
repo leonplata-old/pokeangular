@@ -2,7 +2,6 @@
 <html ng-app="pokeangular">
   <head>
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
-    <link rel="stylesheet" href="styles/pokemon.css" />
     <title>PokeAngular</title>
   </head>
   <body ng-controller="PokemonStats">
@@ -20,9 +19,6 @@
       </div>
     </nav>
     <div class="container" style="margin-top: 50px;">
-      <div>
-
-      </div>
       <div class="row">
         <div class="col-md-12 text-center">
           <h1>{{ pokemon.name }}</h1>
@@ -70,5 +66,10 @@
     </div>
     <script type="application/javascript" src="bower_components/angular/angular.js"></script>
     <script type="application/javascript" src="scripts/app.js"></script>
+    <script type="application/javascript" src="scripts/pokeapi.constant.js"></script>
+    <script type="application/javascript" src="scripts/rest-service.factory.js"></script>
+    <script type="application/javascript" src="scripts/pokemon.factory.js"></script>
+    <script type="application/javascript" src="scripts/move.factory.js"></script>
+    <script type="application/javascript" src="scripts/pokemon-stats.controller.js"></script>
   </body>
 </html>
